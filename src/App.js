@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Formulario from './components/Formulario';
 import Error from './components/Error';
+import Clima from './components/Clima';
 
 function App() {
 	// State Principal
@@ -18,9 +19,9 @@ function App() {
 			if (ciudad === '') return;
 
 			const consultarAPI = async () => {
-				const appID = 'ca0685cc91f6a0be872422408322c3c8';
+				const appId = 'ca0685cc91f6a0be872422408322c3c8';
 
-				const url = `https://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appID}`;
+				const url = `https://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appId}`;
 
 				// Consultar la URL
 				const respuesta = await fetch(url);
@@ -52,9 +53,11 @@ function App() {
 	if (error) {
 		// Hay un error, mostrarlo
 		componente = <Error mensaje="Ambos campos son obligatorios" />;
+	} else if (resultado.cod === '404') {
+		componente = <Error mensaje="La ciudad no existe en nuestro registro" />;
 	} else {
 		// Mostrar el Clima
-		componente = null;
+		componente = <Clima resultado={resultado} />;
 	}
 	return (
 		<div className="App">
